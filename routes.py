@@ -7,7 +7,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 @app.route('/')
 def index():
-    cards = Card.query.all()
+    page = requests.args.get('page', 1, type=int)
+    cards = Card.query.paginate(page=page, per_page=10)
     return render_template('index.html', cards=cards)
 
 @app.route('/register', methods=['GET', 'POST'])

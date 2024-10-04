@@ -1,0 +1,68 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+nav {
+    background-color: #FFCB05;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav a {
+    margin-right: 15px;
+    text-decoration: none;
+    color: #3B4CCA;
+    font-weight: bold;
+}
+
+.container {
+    padding: 20px;
+}
+
+.flash {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+.flash.success {
+    background-color: #D4EDDA;
+    color: #155724
+}
+
+.flash.danger {
+    background-color: #F8D7DA;
+    color: #721C24;
+}
+
+.flash.info {
+    background-color: #D1ECF1;
+    color: #0C5460;
+}
+
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    width: 200px;
+    text-align: center;
+}
+
+.card img {
+    max-width: 100%;
+    height: auto;
+}
+
+.error {
+    color: red;
+    font-size: 0.9em;
+}

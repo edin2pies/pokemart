@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>Pokémart : Available Pokémon Cards</h1>
+{% if cards.has_prev %}
+    <a href="{{ url_for('index', page=cards.prev_num) }}">Previous</a>
+{% endif %}
+<span>Page {{ cards.page }} of {{ cards.pages }}</span>
+{% if cards.has_next %}
+    <a href="{{ url_for('index', page=cards.next_num) }}">Next</a>
+{% endif %}
 <div class="cards">
     {% for card in cards %}
     <div class="card">
