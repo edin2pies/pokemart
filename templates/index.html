@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Pokémart : Available Pokémon Cards</h1>
+<div class="cards">
+    {% for card in cards %}
+    <div class="card">
+        <img src="{{ card.image_url }}" alt="{{ card.name }}" width="200">
+        <h3>{{ card.name }}</h3>
+        <p>Price: ${{ "%.2f"|format(card.price) }}</p>
+        <a href="{{ url_for('card_detail', card_id=card.id) }}">View Details</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
