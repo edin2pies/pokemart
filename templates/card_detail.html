@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card-detail">
+    <img src="{{ card.image_url }}" alt="{{ card.name }}" width="300">
+    <h2>{{ card.name }}</h2>
+    <p>{{ card.description }}</p>
+    <p>Price: ${{ "%.2f"|format(card.price) }}</p>
+    <p>Seller: {{ card.seller.username }}</p>
+    {% if current_user.is_authenticated and current_user.id != card.seller_id %}
+    <form action="{{ url_for('buy_card', card_id=card.id) }}" method="POST">
+        <label for="quantity">Quantity:</label>
+        <input type="number" name="quantity" id="quantity" value="1" min="1">
+        <button type="submit">Buy</button>
+    </form>
+    {% endif %}
+</div>
+{% endblock %}
