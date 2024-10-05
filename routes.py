@@ -1,13 +1,14 @@
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, current_app
 from app import app, db
 from models import User, Card, Order
 from forms import RegistrationForm, LoginForm, CardForm
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+import requests
 
 @app.route('/')
 def index():
-    page = requests.args.get('page', 1, type=int)
+    page = request.args.get('page', 1, type=int)
     cards = Card.query.paginate(page=page, per_page=10)
     return render_template('index.html', cards=cards)
 
@@ -15,15 +16,17 @@ def index():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        hashed_pw = generate_password_hash(form.password.data, method='sha256')
-        new_user = User(username=form.username.data, email=form.email.data, password=hashed_pw)
-        db.session.add(new_user)
+        hashed_pw = generate_password_hash(form.password.data, method='pbkdf2:sha256')
+        user = User(username=form.username.data, email=form.email.data, password=hashed_pw)
+        db.session.add(user)
         db.session.commit()
         flash('Account created successfully! Please log in.', 'success')
         return redirect(url_for('login'))
+    else:
+        print(form.errors)
     return render_template('register.html', form=form)
 
-@app.route('/login', method=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -48,14 +51,14 @@ def logout():
 def add_card():
     form = CardForm()
     if form.validate_on_submit():
-        new_card = Card(
+        card = Card(
             name=form.name.data,
             description=form.description.data,
             price=form.price.data,
             image_url=form.image_url.data,
             seller_id=current_user.id
         )
-        db.session.add(new_card)
+        db.session.add(card)
         db.session.commit()
         flash('Card listed successfully!', 'success')
         return redirect(url_for('index'))

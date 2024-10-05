@@ -24,7 +24,7 @@
                 {% for category, message in messages %}
                     <div class="flash {{ category }}">{{ message }}</div>
                 {% endfor %}
-            {% endfor %}
+            {% endif %}
         {% endwith %}
         {% block content %}{% endblock %}
     </div>
