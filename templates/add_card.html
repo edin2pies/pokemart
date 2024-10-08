@@ -31,6 +31,13 @@
             <span class="error">{{ error }}</span>
         {% endfor %}
     </p>
+    <p>
+        {{ form.stock.label }}<br>
+        {{ form.stock() }}<br>
+        {% for error in form.stock.errors %}
+            <span class="error">{{ error }}</span>
+        {% endfor %}
+    </p>
     <p>{{ form.submit() }}</p>
 </form>
 {% endblock %}

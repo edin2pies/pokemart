@@ -20,4 +20,5 @@ class CardForm(FlaskForm):
     description = TextAreaField('Description', validators=[Length(max=500)])
     price = FloatField('Price ($)', validators=[DataRequired(), NumberRange(min=0.01)])
     image_url = StringField('Image URL', validators=[Length(max=250)])
+    stock = FloatField('Quantity', validators=[DataRequired(), NumberRange(min=1)])
     submit = SubmitField('Add Card')
