@@ -1,0 +1,306 @@
+[
+    {
+        "name": "Bulbasaur",
+        "description": "Bulbasaur is a Grass/Poison type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Ivysaur",
+        "description": "Ivysaur is a Grass/Poison type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Venusaur",
+        "description": "Venusaur is a Grass/Poison type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Charmander",
+        "description": "Charmander is a Fire type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Charmeleon",
+        "description": "Charmeleon is a Fire type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Charizard",
+        "description": "Charizard is a Fire/Flying type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Squirtle",
+        "description": "Squirtle is a Water type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Wartortle",
+        "description": "Wartortle is a Water type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Blastoise",
+        "description": "Blastoise is a Water type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Caterpie",
+        "description": "Caterpie is a Bug type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Metapod",
+        "description": "Metapod is a Bug type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Butterfree",
+        "description": "Butterfree is a Bug/Flying type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Weedle",
+        "description": "Weedle is a Bug/Poison type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Kakuna",
+        "description": "Kakuna is a Bug/Poison type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Beedrill",
+        "description": "Beedrill is a Bug/Poison type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Pidgey",
+        "description": "Pidgey is a Normal/Flying type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Pidgeotto",
+        "description": "Pidgeotto is a Normal/Flying type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Pidgeot",
+        "description": "Pidgeot is a Normal/Flying type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Rattata",
+        "description": "Rattata is a Normal type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Raticate",
+        "description": "Raticate is a Normal type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Spearow",
+        "description": "Spearow is a Normal/Flying type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Fearow",
+        "description": "Fearow is a Normal/Flying type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Ekans",
+        "description": "Ekans is a Poison type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Arbok",
+        "description": "Arbok is a Poison type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Pikachu",
+        "description": "Pikachu is an Electric type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Raichu",
+        "description": "Raichu is an Electric type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Sandshrew",
+        "description": "Sandshrew is a Ground type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Sandslash",
+        "description": "Sandslash is a Ground type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Nidoran ♀",
+        "description": "Nidoran ♀ is a Poison type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Nidorina",
+        "description": "Nidorina is a Poison type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Nidoqueen",
+        "description": "Nidoqueen is a Poison/Ground type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Nidoran ♂",
+        "description": "Nidoran ♂ is a Poison type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Nidorino",
+        "description": "Nidorino is a Poison type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Nidoking",
+        "description": "Nidoking is a Poison/Ground type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Clefairy",
+        "description": "Clefairy is a Fairy type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Clefable",
+        "description": "Clefable is a Fairy type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Vulpix",
+        "description": "Vulpix is a Fire type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Ninetales",
+        "description": "Ninetales is a Fire type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Jigglypuff",
+        "description": "Jigglypuff is a Normal/Fairy type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Wigglytuff",
+        "description": "Wigglytuff is a Normal/Fairy type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Zubat",
+        "description": "Zubat is a Poison/Flying type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Golbat",
+        "description": "Golbat is a Poison/Flying type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Oddish",
+        "description": "Oddish is a Grass/Poison type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Gloom",
+        "description": "Gloom is a Grass/Poison type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Vileplume",
+        "description": "Vileplume is a Grass/Poison type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Paras",
+        "description": "Paras is a Bug/Grass type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Parasect",
+        "description": "Parasect is a Bug/Grass type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Venonat",
+        "description": "Venonat is a Bug/Poison type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Venomoth",
+        "description": "Venomoth is a Bug/Poison type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Diglett",
+        "description": "Diglett is a Ground type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Dugtrio",
+        "description": "Dugtrio is a Ground type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Meowth",
+        "description": "Meowth is a Normal type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Persian",
+        "description": "Persian is a Normal type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Psyduck",
+        "description": "Psyduck is a Water type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Golduck",
+        "description": "Golduck is a Water type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Mankey",
+        "description": "Mankey is a Fighting type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Primeape",
+        "description": "Primeape is a Fighting type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Growlithe",
+        "description": "Growlithe is a Fire type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Arcanine",
+        "description": "Arcanine is a Fire type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Poliwag",
+        "description": "Poliwag is a Water type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Poliwhirl",
+        "description": "Poliwhirl is a Water type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Poliwrath",
+        "description": "Poliwrath is a Water/Fighting type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Abra",
+        "description": "Abra is a Psychic type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Kadabra",
+        "description": "Kadabra is a Psychic type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Alakazam",
+        "description": "Alakazam is a Psychic type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Machop",
+        "description": "Machop is a Fighting type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Machoke",
+        "description": "Machoke is a Fighting type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Machamp",
+        "description": "Machamp is a Fighting type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Bellsprout",
+        "description": "Bellsprout is a Grass/Poison type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Weepinbell",
+        "description": "Weepinbell is a Grass/Poison type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Victreebel",
+        "description": "Victreebel is a Grass/Poison type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Tentacool",
+        "description": "Tentacool is a Water/Poison type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Tentacruel",
+        "description": "Tentacruel is a Water/Poison type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Geodude",
+        "description": "Geodude is a Rock/Ground type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Graveler",
+        "description": "Graveler is a Rock/Ground type Pokemon introduced in Generation 1."
+    },
+    {
+        "name": "Golem",
+        "description": "Golem is a Rock/Ground type Pokemon introduced in Generation 1."
+    }
+]

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, FloatField, TextAreaField, FileField
+from wtforms import StringField, PasswordField, SubmitField, DecimalField, TextAreaField, FileField, SelectField, IntegerField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, NumberRange
 
 class RegistrationForm(FlaskForm):
@@ -16,9 +16,9 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
 
 class CardForm(FlaskForm):
-    name = StringField('Card Name', validators=[DataRequired(), Length(min=1, max=150)])
-    description = TextAreaField('Description', validators=[Length(max=500)])
-    price = FloatField('Price ($)', validators=[DataRequired(), NumberRange(min=0.01)])
-    image_url = StringField('Image URL', validators=[Length(max=250)])
-    stock = FloatField('Quantity', validators=[DataRequired(), NumberRange(min=1)])
+    pokemon_name = SelectField('Select Pokémon', choices=[], validators=[DataRequired()])
+    description = TextAreaField('Description', validators=[DataRequired()])
+    price = DecimalField('Price ($)', places=2, validators=[DataRequired()])
+    image_url = StringField('Image URL', validators=[DataRequired()])
+    stock = IntegerField('Quantity', validators=[DataRequired(), NumberRange(min=1)])
     submit = SubmitField('Add Card')

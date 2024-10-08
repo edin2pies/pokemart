@@ -1,10 +1,18 @@
-from flask import render_template, redirect, url_for, flash, request, current_app
+from flask import render_template, redirect, url_for, flash, request, current_app, jsonify
 from app import app, db
 from models import User, Card, Order, CartItem
 from forms import RegistrationForm, LoginForm, CardForm
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
+import json
+
+@app.route('/api/pokemon', methods=['GET'])
+def get_pokemon():
+    # Load Pokemon data from JSON file
+    with open('pokemon_data.json') as f:
+        pokemon_data = json.load(f)
+    return jsonify(pokemon_data)
 
 @app.route('/')
 def index():
@@ -50,9 +58,16 @@ def logout():
 @login_required
 def add_card():
     form = CardForm()
+    
+    with open('pokemon_data.json') as f:
+        pokemon_data = json.load(f)
+
+    form.pokemon_name.choices = [(pokemon['name'], pokemon['name']) for pokemon in pokemon_data]
+
     if form.validate_on_submit():
+        # Use the form data to create a new card
         card = Card(
-            name=form.name.data,
+            name=form.pokemon_name.data,  # Get selected Pokémon name
             description=form.description.data,
             price=form.price.data,
             image_url=form.image_url.data,
@@ -62,6 +77,7 @@ def add_card():
         db.session.commit()
         flash('Card listed successfully!', 'success')
         return redirect(url_for('index'))
+
     return render_template('add_card.html', form=form)
 
 @app.route('/card/<int:card_id>')
