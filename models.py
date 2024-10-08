@@ -42,3 +42,13 @@ class Order(db.Model):
 
     def __repr__(self):
         return f"<Order {self.id} by User {self.buyer_id}>"
+    
+class CartItem(db.Model):
+    __tablename__ = 'cart_items'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    card_id = db.Column(db.Integer, db.ForeignKey('cards.id'))
+    quantity = db.Column(db.Integer, nullable=False)
+
+    user = db.relationship('User', backref='cart_items')
+    card = db.relationship('Card', backref='cart_items')

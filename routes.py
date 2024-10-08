@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for, flash, request, current_app
 from app import app, db
-from models import User, Card, Order
+from models import User, Card, Order, CartItem
 from forms import RegistrationForm, LoginForm, CardForm
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -88,3 +88,44 @@ def buy_card(card_id):
     db.session.commit()
     flash('Purchase successful!', 'success')
     return redirect(url_for('index'))
+
+@app.route('/cart')
+@login_required
+def view_cart():
+    cart_items = CartItem.query.filter_by(user_id=current_user.id).all()
+    total_price = sum(item.card.price * item.quantity for item in cart_items)
+    return render_template('cart.html', cart_items=cart_items, total_price=total_price)
+
+@app.route('/add_to_card/<int:card_id>', methods=['POST'])
+@login_required
+def add_to_cart(card_id):
+    quantity = request.form.get('quantity', 1, type=int)
+    cart_item = CartItem(user_id=current_user.id, card_id=card_id, quantity=quantity)
+    db.session.add(cart_item)
+    db.session.commit()
+    flash('Card added to cart!', 'success')
+    return redirect(url_for('index'))
+
+@app.route('/checkout', methods=['POST'])
+@login_required
+def checkout():
+    cart_items = CartItem.query.filter_by(user_id=current_user.id).all()
+    # Implement payment processing logic here
+    # After processing, clear the clart:
+    for item in cart_items:
+        db.session.delete(item)
+    db.session.commit()
+    flash('Purchase successful!', 'success')
+    return redirect(url_for('index'))
+
+@app.route('/remove_from_cart/<int:item_id>', methods=['POST'])
+@login_required
+def remove_from_cart(item_id):
+    cart_item = CartItem.query.get_or_404(item_id)
+    if cart_item.user_id == current_user.id:
+        db.session.delete(cart_item)
+        db.session.commit()
+        flash('Item removed from cart!', 'success')
+    else:
+        flash('You cannot remove this item.', 'danger')
+    return redirect(url_for('view_cart'))
