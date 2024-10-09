@@ -1,17 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="card-detail">
-    <img src="{{ card.image_url }}" alt="{{ card.name }}" width="300">
-    <h2>{{ card.name }}</h2>
-    <p>{{ card.description }}</p>
-    <p>Price: ${{ "%.2f"|format(card.price) }}</p>
-    <p>Seller: {{ card.seller.username }}</p>
-    {% if current_user.is_authenticated and current_user.id != card.seller_id %}
-    <form action="{{ url_for('add_to_cart', card_id=card.id) }}" method="POST">
-        <label for="quantity">Quantity:</label>
-        <input type="number" name="quantity" id="quantity" value="1" min="1">
-        <button type="submit">Add to Cart</button>
-    </form>
-    {% endif %}
+<div class="container mt-4">
+    <div class="card mb-4">
+        <img src="{{ card.image_url }}" class="card-img-top" alt="{{ card.name }}" style="max-width: 300px; margin: auto;">
+        <div class="card-body text-center">
+            <h2 class="card-title">{{ card.name }}</h2>
+            <p class="card-text">{{ card.description }}</p>
+            <p class="card-text">Price: ${{ "%.2f"|format(card.price) }}</p>
+            <p class="card-text">Seller: {{ card.seller.username }}</p>
+            
+            {% if current_user.is_authenticated and current_user.id != card.seller_id %}
+            <form action="{{ url_for('add_to_cart', card_id=card.id) }}" method="POST" class="mt-3">
+                <div class="form-group">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" name="quantity" id="quantity" class="form-control" value="1" min="1">
+                </div>
+                <button type="submit" class="btn btn-primary">Add to Cart</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary">Back to Cards</a>
 </div>
 {% endblock %}
