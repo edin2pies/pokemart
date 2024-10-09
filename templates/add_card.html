@@ -25,9 +25,6 @@
     <p>
         {{ form.image_url.label }}<br>
         {{ form.image_url(size=64) }}<br>
-        {% for error in form.image_url.errors %}
-            <span class="error">{{ error }}</span>
-        {% endfor %}
     </p>
     <p>
         {{ form.stock.label }}<br>
@@ -61,11 +58,22 @@
     function populateDescription() {
         const select = document.getElementById("pokemon-name");
         const descriptionArea = document.getElementById("description");
+        const imageUrlField = document.getElementById("image_url");
         const selectedPokemon = select.value;
         
         // Populate the description area with the selected Pokémon's description
         descriptionArea.value = selectedPokemon ? pokemonDescriptions[selectedPokemon] : '';
+
+        if (selectedPokemon) {
+            const formattedPokemonName = selectedPokemon.toLowerCase(); // Convert to lowercase for URL
+            imageUrlField.value = `https://img.pokemondb.net/artwork/${formattedPokemonName}.jpg`;
+        } else {
+            imageUrlField.value = ''; // Clear image URL if no Pokémon is selected
+        }
     }
+
+     // Ensure this function is called on change
+     document.getElementById("pokemon-name").addEventListener("change", populateDescription);
 </script>
 
 {% endblock %}
