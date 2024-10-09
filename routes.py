@@ -16,8 +16,28 @@ def get_pokemon():
 
 @app.route('/')
 def index():
+    # Get the filter parameters from the request
+    name_filter = request.args.get('name')
+    min_price = request.args.get('min_price', type=float)
+    max_price = request.args.get('max_price', type=float)
+    
+    # Start with the base query
+    query = Card.query
+
+    # Apply filters based on user input
+    if name_filter:
+        query = query.filter(Card.name.ilike(f'%{name_filter}%'))  # Filter by name
+
+    if min_price is not None:
+        query = query.filter(Card.price >= min_price)  # Filter by minimum price
+
+    if max_price is not None:
+        query = query.filter(Card.price <= max_price)  # Filter by maximum price
+
+    # Paginate the results
     page = request.args.get('page', 1, type=int)
-    cards = Card.query.paginate(page=page, per_page=10)
+    cards = query.paginate(page=page, per_page=10)
+
     return render_template('index.html', cards=cards)
 
 @app.route('/register', methods=['GET', 'POST'])

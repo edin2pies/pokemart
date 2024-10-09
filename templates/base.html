@@ -9,19 +9,18 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <!-- Bootstrap and other CSS frameworks later -->
 </head>
 <body>
 
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid"> <!-- Use container-fluid for full-width navbar -->
                 <a class="navbar-brand" href="{{ url_for('index') }}">Pokémart</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ml-auto">
+                    <ul class="navbar-nav ml-auto"> <!-- Use ml-auto to push items to the right -->
                         {% if current_user.is_authenticated %}
                             <li class="nav-item">
                                 <span class="navbar-text">Welcome, {{ current_user.username }}!</span>
@@ -49,25 +48,23 @@
         </nav>
     </header>
     
-    
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
 
-<main class="container">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="flash {{ category }}">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-    {% block content %}{% endblock %}
-</main>
+    <footer>
+        <div class="container footer">
+            <p>&copy; 2024 Pokemon Card Marketplace. All rights reserved.</p>
+        </div>
+    </footer>
 
-<footer>
-    <div class="container">
-        <p>&copy; 2024 Pokemon Card Marketplace. All rights reserved.</p>
-    </div>
-</footer>
-
-<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
 </html>
