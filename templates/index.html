@@ -4,28 +4,34 @@
     <h1 class="text-center">Available Pokémon Cards</h1>
 
     <!-- Filter Form -->
-    <form method="GET" class="mb-4">
+    <form method="GET" class="mb-4" id="filterForm">
         <div class="row">
             <div class="col-md-4">
-                <input type="text" name="name" placeholder="Filter by name" class="form-control">
+                <input type="text" name="name" placeholder="Filter by name" class="form-control" 
+                       value="{{ request.args.get('name', '') }}">
             </div>
             <div class="col-md-4">
-                <input type="number" name="min_price" placeholder="Min Price" class="form-control" step="0.01">
-            </div>
-            <div class="col-md-4">
-                <input type="number" name="max_price" placeholder="Max Price" class="form-control" step="0.01">
+                <select name="price_range" class="form-control" onchange="this.form.submit()">
+                    <option value="">Select Price Range</option>
+                    <option value="0-5" {% if request.args.get('price_range') == '0-5' %}selected{% endif %}>Up to $5.00</option>
+                    <option value="5-10" {% if request.args.get('price_range') == '5-10' %}selected{% endif %}>$5.00 - $10.00</option>
+                    <option value="10-20" {% if request.args.get('price_range') == '10-20' %}selected{% endif %}>$10.00 - $20.00</option>
+                    <option value="20-50" {% if request.args.get('price_range') == '20-50' %}selected{% endif %}>$20.00 - $50.00</option>
+                    <option value="50+" {% if request.args.get('price_range') == '50+' %}selected{% endif %}>Over $50.00</option>
+                </select>
             </div>
         </div>
         <button type="submit" class="btn btn-primary mt-2">Filter</button>
+        <button type="button" class="btn btn-secondary mt-2" onclick="clearFilters()">Clear Filters</button>
     </form>
     
     <div class="text-center mb-4">
         {% if cards.has_prev %}
-            <a href="{{ url_for('index', page=cards.prev_num) }}" class="btn btn-secondary">Previous</a>
+            <a href="{{ url_for('index', page=cards.prev_num, name=request.args.get('name', ''), price_range=request.args.get('price_range', '')) }}" class="btn btn-secondary">Previous</a>
         {% endif %}
         <span>Page {{ cards.page }} of {{ cards.pages }}</span>
         {% if cards.has_next %}
-            <a href="{{ url_for('index', page=cards.next_num) }}" class="btn btn-secondary">Next</a>
+            <a href="{{ url_for('index', page=cards.next_num, name=request.args.get('name', ''), price_range=request.args.get('price_range', '')) }}" class="btn btn-secondary">Next</a>
         {% endif %}
     </div>
     
@@ -44,4 +50,14 @@
         {% endfor %}
     </div>
 </div>
+
+<script>
+    function clearFilters() {
+        document.querySelector('input[name="name"]').value = '';
+        document.querySelector('select[name="price_range"]').value = '';
+        // Submit the form to refresh the page with cleared filters
+        document.getElementById('filterForm').submit();
+    }
+</script>
+
 {% endblock %}
