@@ -36,9 +36,12 @@ def index():
             if max_price != '+':
                 query = query.filter(Card.price <= float(max_price))
 
+    # Sort the query results by price (low to high)
+    query = query.order_by(Card.price.asc())
+
     # Paginate the results
     page = request.args.get('page', 1, type=int)
-    cards = query.paginate(page=page, per_page=10)
+    cards = query.paginate(page=page, per_page=12)
 
     return render_template('index.html', cards=cards)
 
