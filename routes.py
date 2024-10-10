@@ -194,36 +194,44 @@ def my_listings():
 @app.route('/remove_listing/<int:card_id>', methods=['POST'])
 @login_required
 def remove_listing(card_id):
-    # Find the card to be removed
-    card = Card.query.get(card_id)
-    
-    if not card:
-        flash('Card not found!', 'danger')
+    # Check if the card is in the user's cart
+    cart_items = CartItem.query.filter_by(card_id=card_id).all()
+    if cart_items:
+        flash('Cannot remove the listing while it is in someone\'s cart.', 'danger')
         return redirect(url_for('my_listings'))
 
-    # Check if there are orders associated with this card
-    orders = Order.query.filter_by(card_id=card_id).all()
+    # If not in cart, proceed to remove the listing
+    listing = Card.query.get(card_id)
+    if listing:
+        db.session.delete(listing)
+        db.session.commit()
+        flash('Listing removed successfully!', 'success')
+    else:
+        flash('Listing not found.', 'danger')
 
-    if orders:
-        flash('Cannot remove listing as there are associated orders!', 'danger')
-        return redirect(url_for('my_listings'))
-
-    # If no orders, remove the card
-    db.session.delete(card)
-    db.session.commit()
-    flash('Card removed successfully!', 'success')
     return redirect(url_for('my_listings'))
-
 
 @app.route('/update_price/<int:card_id>', methods=['POST'])
 @login_required
 def update_price(card_id):
+    # Check if the card is in any user's cart
+    cart_items = CartItem.query.filter_by(card_id=card_id).all()
+    if cart_items:
+        flash('Cannot update the price while the listing is in someone\'s cart.', 'danger')
+        return redirect(url_for('my_listings'))
+
+    # If not in cart, proceed to update the price
     card = Card.query.get(card_id)
-    if card and card.seller_id == current_user.id:
-        new_price = request.form.get('new_price', type=float)
-        card.price = new_price
-        db.session.commit()
-        flash('Price updated successfully!', 'success')
+    if card:
+        new_price = request.form.get('new_price')
+        if new_price:
+            card.price = float(new_price)  # Update card price
+            db.session.commit()
+            flash('Price updated successfully!', 'success')
+        else:
+            flash('Invalid price.', 'danger')
     else:
-        flash('Listing not found or you do not have permission to update it.', 'danger')
+        flash('Card not found.', 'danger')
+
     return redirect(url_for('my_listings'))
+
