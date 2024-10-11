@@ -149,8 +149,6 @@ def view_cart():
     db.session.commit()  # Commit changes to remove invalid items
     return render_template('cart.html', cart_items=cart_items, total_price=total_price)
 
-
-
 @app.route('/add_to_card/<int:card_id>', methods=['POST'])
 @login_required
 def add_to_cart(card_id):
