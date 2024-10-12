@@ -157,18 +157,28 @@ def finalize_bid(card_id):
 @app.route('/remove_bid/<int:card_id>', methods=['POST'])
 @login_required
 def remove_bid(card_id):
+    # Get the card and ensure the user is the highest bidder
     card = Card.query.get_or_404(card_id)
 
-    # Ensure that the current user is the highest bidder
-    if card.highest_bidder_id == current_user.id:
-        card.highest_bidder_id = None
-        card.highest_bid = None
-        db.session.commit()
-        flash('Your bid has been removed.', 'success')
+    # Find the bid associated with the current user
+    bid = Bid.query.filter_by(card_id=card.id, user_id=current_user.id).first()
+
+    if bid:
+        # Ensure that the current user is the highest bidder
+        if card.highest_bidder_id == current_user.id:
+            # Delete the bid from the bids table
+            db.session.delete(bid)  # Delete the bid
+            card.highest_bidder_id = None  # Reset highest bidder
+            card.highest_bid = None  # Reset highest bid
+            db.session.commit()  # Commit the changes
+            flash('Your bid has been removed.', 'success')
+        else:
+            flash('You cannot remove this bid.', 'danger')
     else:
-        flash('You cannot remove this bid.', 'danger')
+        flash('You do not have an active bid on this card.', 'danger')
 
     return redirect(url_for('view_active_bids'))
+
 
 @app.route('/my_listings', methods=['GET', 'POST'])
 @login_required
