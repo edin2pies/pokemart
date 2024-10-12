@@ -8,13 +8,36 @@
         <div class="col-md-6">
             <h2 class="card-title">{{ card.name }}</h2>
             <p class="card-text">Description: {{ card.description }}</p>
-            <p class="card-text">Price: ${{ "%.2f"|format(card.price) }}</p>
+            <p class="card-text">Buy-out Price: ${{ "%.2f"|format(card.buy_out_price) }}</p>
+            <p class="card-text">Current Highest Bid: 
+                {% if card.highest_bid is not none %}
+                    ${{ "%.2f"|format(card.highest_bid) }}
+                {% else %}
+                    No bids placed yet.
+                {% endif %}
+            </p>
+            <p class="card-text">Highest Bidder: 
+                {% if card.highest_bidder_id %}
+                    {{ card.highest_bidder.username }} <!-- Assuming User model has a username field -->
+                {% else %}
+                    No bids placed yet.
+                {% endif %}
+            </p>
+            <p class="card-text">Bidding Ends On: 
+                {% if card.bidding_end_time %}
+                    {{ card.bidding_end_time.strftime('%Y-%m-%d') }} <!-- Format the date as desired -->
+                {% else %}
+                    Bidding has not started yet.
+                {% endif %}
+            </p>
             <p class="card-text">Seller: {{ card.seller.username }}</p>
+
             {% if current_user.is_authenticated and current_user.id != card.seller_id %}
-            <form action="{{ url_for('add_to_cart', card_id=card.id) }}" method="POST" class="mt-2">
-                <label for="quantity">Quantity:</label>
-                <input type="number" name="quantity" id="quantity" value="1" min="1" class="form-control mb-2">
-                <button type="submit" class="btn btn-primary">Add to Cart</button>
+            <!-- Bidding section -->
+            <form action="{{ url_for('place_bid', card_id=card.id) }}" method="POST" class="mt-2">
+                <label for="bid_amount">Place a Bid:</label>
+                <input type="number" name="bid_amount" id="bid_amount" min="0" class="form-control mb-2" required>
+                <button type="submit" class="btn btn-success">Submit Bid</button>
             </form>
             {% endif %}
         </div>

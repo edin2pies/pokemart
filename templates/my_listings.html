@@ -10,7 +10,7 @@
                 <img src="{{ card.image_url }}" alt="{{ card.name }}" class="img-fluid" style="width: 50px; height: auto; margin-right: 10px;">
                 <div>
                     <h5 class="mb-1">{{ card.name }}</h5>
-                    <p class="mb-1">Price: ${{ "%.2f"|format(card.price) }}</p>
+                    <p class="mb-1">Price: ${{ "%.2f"|format(card.buy_out_price) }}</p>
                 </div>
             </div>
             <div>

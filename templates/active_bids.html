@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Your Active Bids</h2>
+    {% if active_bids %}
+        <ul class="list-group">
+            {% for card in active_bids %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5>{{ card.name }}</h5>
+                        <p>Current Highest Bid: ${{ "%.2f"|format(card.highest_bid) }}</p>
+                        <p>Highest Bidder: 
+                            {% if card.highest_bidder_id %}
+                                {{ card.highest_bidder.username }} <!-- Assuming User model has a username field -->
+                            {% else %}
+                                No bids placed yet.
+                            {% endif %}
+                        </p>
+                    </div>
+                    <form action="{{ url_for('remove_bid', card_id=card.id) }}" method="POST" class="mb-0">
+                        <button type="submit" class="btn btn-danger btn-sm">Remove Bid</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You have no active bids.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -41,7 +41,7 @@
                 <img src="{{ card.image_url }}" class="card-img-top" alt="{{ card.name }}">
                 <div class="card-body">
                     <h5 class="card-title">{{ card.name }}</h5>
-                    <p class="card-text">Price: ${{ "%.2f"|format(card.price) }}</p>
+                    <p class="card-text">Buy-out Price: ${{ "%.2f"|format(card.buy_out_price) }}</p>
                     <a href="{{ url_for('card_detail', card_id=card.id) }}" class="btn btn-primary">View Details</a>
                 </div>
             </div>

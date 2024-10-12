@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for, flash, request, current_app, jsonify
 from app import app, db
-from models import User, Card, Order, CartItem
+from models import User, Card, Order, Bid
 from forms import RegistrationForm, LoginForm, CardForm
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -29,15 +29,15 @@ def index():
 
     if price_range:
         if price_range == '50+':
-            query = query.filter(Card.price > 50)  # Filter for cards over $50
+            query = query.filter(Card.buy_out_price > 50)  # Filter for cards over $50
         else:
             min_price, max_price = price_range.split('-')
-            query = query.filter(Card.price >= float(min_price))
+            query = query.filter(Card.buy_out_price >= float(min_price))
             if max_price != '+':
-                query = query.filter(Card.price <= float(max_price))
+                query = query.filter(Card.buy_out_price <= float(max_price))
 
     # Sort the query results by price (low to high)
-    query = query.order_by(Card.price.asc())
+    query = query.order_by(Card.buy_out_price.asc())
 
     # Paginate the results
     page = request.args.get('page', 1, type=int)
@@ -95,7 +95,9 @@ def add_card():
         card = Card(
             name=form.pokemon_name.data,  # Get selected Pokémon name
             description=form.description.data,
-            price=form.price.data,
+            buy_out_price=form.buy_out_price.data,
+            highest_bid=form.highest_bid.data,
+            bidding_end_time=form.bidding_end_time.data,
             image_url=form.image_url.data,
             seller_id=current_user.id
         )
@@ -105,11 +107,6 @@ def add_card():
         return redirect(url_for('index'))
 
     return render_template('add_card.html', form=form)
-
-@app.route('/card/<int:card_id>')
-def card_detail(card_id):
-    card = Card.query.get_or_404(card_id)
-    return render_template('card_detail.html', card=card)
 
 @app.route('/buy/<int:card_id>', methods=['POST'])
 @login_required
@@ -131,57 +128,47 @@ def buy_card(card_id):
     flash('Purchase successful!', 'success')
     return redirect(url_for('index'))
 
-@app.route('/cart')
+@app.route('/view_active_bids')
 @login_required
-def view_cart():
-    # Query to get the user's cart items
-    cart_items = CartItem.query.filter_by(user_id=current_user.id).all()
-    
-    # Calculate the total price, checking for valid cards
-    total_price = 0
-    for item in cart_items:
-        if item.card:  # Check if the card exists
-            total_price += item.card.price * item.quantity
-        else:
-            # Optionally, you can remove the item from the cart if the card no longer exists
-            db.session.delete(item)
+def view_active_bids():
+    # Query for the active bids for the current user
+    active_bids = Card.query.filter(Card.highest_bidder_id == current_user.id).all()
+    return render_template('active_bids.html', active_bids=active_bids)
 
-    db.session.commit()  # Commit changes to remove invalid items
-    return render_template('cart.html', cart_items=cart_items, total_price=total_price)
-
-@app.route('/add_to_card/<int:card_id>', methods=['POST'])
+@app.route('/finalize_bid/<int:card_id>', methods=['POST'])
 @login_required
-def add_to_cart(card_id):
-    quantity = request.form.get('quantity', 1, type=int)
-    cart_item = CartItem(user_id=current_user.id, card_id=card_id, quantity=quantity)
-    db.session.add(cart_item)
+def finalize_bid(card_id):
+    card = Card.query.get_or_404(card_id)
+
+    # Ensure the current user is the highest bidder
+    if card.highest_bidder_id != current_user.id:
+        flash('You are not the highest bidder.', 'danger')
+        return redirect(url_for('card_detail', card_id=card_id))
+
+    # Implement payment processing logic here (if needed)
+    # ...
+
+    # Optionally, mark the card as sold or remove it from bidding
+    db.session.delete(card)  # or update the card's status
     db.session.commit()
-    flash('Card added to cart!', 'success')
+    flash('Bid finalized successfully!', 'success')
     return redirect(url_for('index'))
 
-@app.route('/checkout', methods=['POST'])
+@app.route('/remove_bid/<int:card_id>', methods=['POST'])
 @login_required
-def checkout():
-    cart_items = CartItem.query.filter_by(user_id=current_user.id).all()
-    # Implement payment processing logic here
-    # After processing, clear the clart:
-    for item in cart_items:
-        db.session.delete(item)
-    db.session.commit()
-    flash('Purchase successful!', 'success')
-    return redirect(url_for('index'))
+def remove_bid(card_id):
+    card = Card.query.get_or_404(card_id)
 
-@app.route('/remove_from_cart/<int:item_id>', methods=['POST'])
-@login_required
-def remove_from_cart(item_id):
-    cart_item = CartItem.query.get_or_404(item_id)
-    if cart_item.user_id == current_user.id:
-        db.session.delete(cart_item)
+    # Ensure that the current user is the highest bidder
+    if card.highest_bidder_id == current_user.id:
+        card.highest_bidder_id = None
+        card.highest_bid = None
         db.session.commit()
-        flash('Item removed from cart!', 'success')
+        flash('Your bid has been removed.', 'success')
     else:
-        flash('You cannot remove this item.', 'danger')
-    return redirect(url_for('view_cart'))
+        flash('You cannot remove this bid.', 'danger')
+
+    return redirect(url_for('view_active_bids'))
 
 @app.route('/my_listings', methods=['GET', 'POST'])
 @login_required
@@ -192,13 +179,14 @@ def my_listings():
 @app.route('/remove_listing/<int:card_id>', methods=['POST'])
 @login_required
 def remove_listing(card_id):
-    # Check if the card is in the user's cart
-    cart_items = CartItem.query.filter_by(card_id=card_id).all()
-    if cart_items:
-        flash('Cannot remove the listing while it is in someone\'s cart.', 'danger')
+    # Check if the card is in any active bids
+    active_bid = Bid.query.filter_by(card_id=card_id).first()  # Replace with your actual Bid model
+
+    if active_bid:
+        flash('Cannot remove the listing while there is an active bid.', 'danger')
         return redirect(url_for('my_listings'))
 
-    # If not in cart, proceed to remove the listing
+    # If not in active bids, proceed to remove the listing
     listing = Card.query.get(card_id)
     if listing:
         db.session.delete(listing)
@@ -207,23 +195,27 @@ def remove_listing(card_id):
     else:
         flash('Listing not found.', 'danger')
 
+    print("Checking for active bids on card ID:", card_id)
+    print("Active Bid Found:", active_bid)
+
     return redirect(url_for('my_listings'))
 
 @app.route('/update_price/<int:card_id>', methods=['POST'])
 @login_required
 def update_price(card_id):
-    # Check if the card is in any user's cart
-    cart_items = CartItem.query.filter_by(card_id=card_id).all()
-    if cart_items:
-        flash('Cannot update the price while the listing is in someone\'s cart.', 'danger')
+    # Check if the card is in any active bids
+    active_bids = Bid.query.filter_by(card_id=card_id).first()  # Replace with your actual Bid model
+
+    if active_bids:
+        flash('Cannot update the price while there is an active bid.', 'danger')
         return redirect(url_for('my_listings'))
 
-    # If not in cart, proceed to update the price
+    # If not in active bids, proceed to update the price
     card = Card.query.get(card_id)
     if card:
         new_price = request.form.get('new_price')
         if new_price:
-            card.price = float(new_price)  # Update card price
+            card.buy_out_price = float(new_price)  # Update buy-out price
             db.session.commit()
             flash('Price updated successfully!', 'success')
         else:
@@ -233,3 +225,30 @@ def update_price(card_id):
 
     return redirect(url_for('my_listings'))
 
+@app.route('/card/<int:card_id>')
+def card_detail(card_id):
+    card = Card.query.get_or_404(card_id)
+    return render_template('card_detail.html', card=card)
+
+@app.route('/place_bid/<int:card_id>', methods=['POST'])
+@login_required
+def place_bid(card_id):
+    card = Card.query.get_or_404(card_id)
+    bid_amount = float(request.form.get('bid_amount', 0))
+
+    # Check if the bid_amount is greater than the current highest bid
+    if card.highest_bid is None or bid_amount > card.highest_bid:
+        # Update the card's highest bid and highest bidder
+        card.highest_bid = bid_amount
+        card.highest_bidder_id = current_user.id  # Assuming the user is the highest bidder
+
+        # Create a new bid entry
+        new_bid = Bid(card_id=card.id, user_id=current_user.id, bid_amount=bid_amount)
+        db.session.add(new_bid)
+
+        db.session.commit()
+        flash('Your bid has been placed successfully!', 'success')
+    else:
+        flash('Your bid must be higher than the current highest bid.', 'danger')
+
+    return redirect(url_for('card_detail', card_id=card.id))
